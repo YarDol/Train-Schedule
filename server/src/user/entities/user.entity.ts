@@ -1,5 +1,5 @@
-import { Ticket } from "src/tickets/entities/ticket.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -11,9 +11,6 @@ export class User {
 
     @Column()
     password: string
-    
-    @OneToMany(() => Ticket, (ticket) => ticket.user)
-    ticket: Ticket[]
 
     @CreateDateColumn()
     createdAt: Date
