@@ -6,7 +6,6 @@ import { TrainModule } from './train/train.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
   imports: [
@@ -27,7 +26,7 @@ import { TicketsModule } from './tickets/tickets.module';
         entities: [__dirname + '/**/*.entity{.js, .ts}'],
       }),
       inject: [ConfigService]
-    }), TicketsModule
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
