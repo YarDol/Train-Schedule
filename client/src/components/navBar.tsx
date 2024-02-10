@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import {FC} from 'react'
 
 const Navbar: FC = () => {
     return (
@@ -8,4 +8,4 @@ const Navbar: FC = () => {
     )
 }
 
-export default Navbar
+export default Navbar;

@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import {FC} from 'react'
 
 const Error404: FC = () => {
     return (
@@ -8,4 +8,4 @@ const Error404: FC = () => {
     )
 }
 
-export default Error404
+export default Error404;

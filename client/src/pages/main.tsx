@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import {FC} from 'react'
 
 const Main: FC = () => {
     return (
@@ -8,4 +8,4 @@ const Main: FC = () => {
     )
 }
 
-export default Main
+export default Main;

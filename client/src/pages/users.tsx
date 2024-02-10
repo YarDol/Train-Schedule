@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import {FC} from 'react'
 
 const Users: FC = () => {
     return (
@@ -8,4 +8,4 @@ const Users: FC = () => {
     )
 }
 
-export default Users
+export default Users;
