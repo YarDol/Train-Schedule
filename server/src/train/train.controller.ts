@@ -26,4 +26,9 @@ export class TrainController {
   remove(@Param('id') id: string) {
     return this.trainService.remove(+id);
   }
+
+  @Patch(":id")
+  update(@Body() trainDto: CreateTrainDto, @Param('id') id: string){
+    return this.trainService.update(+id, trainDto);
+  }
 }

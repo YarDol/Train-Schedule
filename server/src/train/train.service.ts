@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrainDto } from './dto/create-train.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Train } from './entities/train.entity';
@@ -11,14 +11,12 @@ export class TrainService {
   ){}
 
   async create(createTrainDto: CreateTrainDto) {
-    const train = await this.trainRepository.save({
-      startCity: createTrainDto.startCity,
-      endCity: createTrainDto.endCity,
-      dispatch: createTrainDto.dispatch,
-      arrival: createTrainDto.dispatch
+    const exist = await this.trainRepository.findOne({
+      where: {...createTrainDto}
     })
-
-    return {train}
+    if (exist) throw new BadRequestException('Such a train already exists')
+    const train = this.trainRepository.create({...createTrainDto})
+    return this.trainRepository.save(train)
   }
 
   async findAll() {
@@ -42,4 +40,11 @@ export class TrainService {
 
     return await this.trainRepository.delete(id);
   }
+
+  async update(id: number, trainDto: CreateTrainDto){
+    const train = await this.findOne(id)
+    Object.assign(train, {...trainDto});
+    return this.trainRepository.save(train);
+  }
 }
+

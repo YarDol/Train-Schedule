@@ -1,6 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Ticket } from "src/tickets/entities/ticket.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Repository, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Repository, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Train {
@@ -18,15 +17,18 @@ export class Train {
     @Column()
     endCity: string
 
-    @Column()
-    dispatch: string
+    @Column("timestamp")
+    departure: Date
+
+    @Column("timestamp")
+    arrival: Date
 
     @Column()
-    arrival: string
+    availableSeats: number;
 
-    @OneToMany(() => Ticket, (ticket) => ticket.train)
-    ticket: Ticket
-
+    @Column()
+    price: number;
+    
     @CreateDateColumn()
     createdAt: Date
 

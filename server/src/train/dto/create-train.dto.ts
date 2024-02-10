@@ -1,9 +1,29 @@
-import { IsNotEmpty } from "class-validator";
+import { IsDateString, IsNumber, IsString, Max, Min } from "class-validator";
 
 export class CreateTrainDto {
-    @IsNotEmpty({message: 'Cant be empty'})
+    // @IsString()
+    // @Min(3)
+    // @Max(25)
     startCity: string
+
+    // @IsString()
+    // @Min(3)
+    // @Max(25)
     endCity: string
-    dispatch: string
-    arrival: string
+
+    @IsDateString()
+    departure: Date
+
+    @IsDateString()
+    arrival: Date
+
+    // @IsNumber()
+    // @Min(0)
+    // @Max(500)
+    availableSeats: number
+
+    // @IsNumber()
+    // @Min(0)
+    // @Max(5000)
+    price: number;
 }
