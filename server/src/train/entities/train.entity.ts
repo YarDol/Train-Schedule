@@ -18,6 +18,12 @@ export class Train {
     @Column()
     endCity: string
 
+    @Column()
+    dispatch: string
+
+    @Column()
+    arrival: string
+
     @OneToMany(() => Ticket, (ticket) => ticket.train)
     ticket: Ticket
 
