@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { TrainService } from '../services/train.service';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
+import * as yup from 'yup';
 
 const CreateTrain: FC = () => {
     const navigate = useNavigate();
@@ -12,6 +13,15 @@ const CreateTrain: FC = () => {
         arrival: '',
         availableSeats: 0,
         price: 0,
+    });
+
+    const schema = yup.object().shape({
+        startCity: yup.string().required('Start City is required').min(3, 'Start City must be at least 3 characters'),
+        endCity: yup.string().required('End City is required').min(3, 'End City must be at least 3 characters'),
+        departure: yup.string().required('Departure is required'),
+        arrival: yup.string().required('Arrival is required'),
+        availableSeats: yup.number().required('Available Seats is required').min(1, 'Minimum 1 seats').max(600, 'Maximum 600 seats'),
+        price: yup.number().required('Price is required').min(10, 'Minimum price is 10').max(3000, 'Maximum price is 3000'),
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +35,19 @@ const CreateTrain: FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            await schema.validate(formData, { abortEarly: false });
+
             const createdTrain = await TrainService.createTrain(formData);
             toast.success('Train created successfully');
             navigate('/');
             return createdTrain;
-        } catch (error) {
-            toast.error('Error creating train');
+        } catch (err: any) {
+            if (err.name === 'ValidationError') {
+                err.errors.forEach((error: string) => toast.error(error));
+            } else {
+                const error = err.response?.data?.message;
+                toast.error(error?.toString() || 'Error creating train');
+            }
         }
     };
 

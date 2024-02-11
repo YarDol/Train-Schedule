@@ -2,6 +2,7 @@ import {FC, useEffect, useState} from 'react'
 import { TrainService } from '../services/train.service';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 
 const EditTrain: FC = () => {
     const navigate = useNavigate();
@@ -13,6 +14,14 @@ const EditTrain: FC = () => {
         arrival: '',
         availableSeats: 0,
         price: 0,
+    });
+    const schema = yup.object().shape({
+        startCity: yup.string().required('Start City is required').min(3, 'Start City must be at least 3 characters'),
+        endCity: yup.string().required('End City is required').min(3, 'End City must be at least 3 characters'),
+        departure: yup.string().required('Departure is required'),
+        arrival: yup.string().required('Arrival is required'),
+        availableSeats: yup.number().required('Available Seats is required').min(1, 'Minimum 1 seats').max(600, 'Maximum 600 seats'),
+        price: yup.number().required('Price is required').min(10, 'Minimum price is 10').max(3000, 'Maximum price is 3000'),
     });
 
     const fetchTrainInfo = async () => {
@@ -48,11 +57,17 @@ const EditTrain: FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            await schema.validate(formData, { abortEarly: false });
             await TrainService.updateTrain(`${id}`, formData);
             toast.success('Train updated successfully');
             navigate('/');
-        } catch (error) {
-            toast.error('Error updating train');
+        } catch (err: any) {
+            if (err.name === 'ValidationError') {
+                err.errors.forEach((error: string) => toast.error(error));
+            } else {
+                const error = err.response?.data?.message;
+                toast.error(error?.toString() || 'Error updating train');
+            }
         }
     };
 

@@ -5,6 +5,7 @@ import { setTokenToLocalStorage } from '../utils/localstorage'
 import { useAppDispatch } from '../store/hooks'
 import { login } from '../store/user/userSlice'
 import { useNavigate } from 'react-router-dom'
+import * as yup from 'yup';
 
 const Auth: FC = () => {
     const [email, setEmail] = useState<string>('')
@@ -13,9 +14,16 @@ const Auth: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
+    const validationSchema = yup.object().shape({
+        email: yup.string().email('Invalid email').required('Email is required'),
+        password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    });
+
     const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
+            await validationSchema.validate({ email, password }, { abortEarly: false });
+
             const data = await AuthService.login({email, password})
 
             if(data){
@@ -25,22 +33,32 @@ const Auth: FC = () => {
                 navigate('/')
             }
         } catch (err: any) {
-            const error = err.response?.data?.message
-            toast.error(error.toString())
+            if (err.name === 'ValidationError') {
+                err.errors.forEach((error: string) => toast.error(error));
+            } else {
+                const error = err.response?.data?.message;
+                toast.error(error?.toString() || 'Error during login');
+            }
         }
     }
 
     const registrationHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
+            await validationSchema.validate({ email, password }, { abortEarly: false });
+
             const data = await AuthService.registration({email, password})
             if(data){
                 toast.success('Account has been created successfully')
                 setIsLogin(!isLogin)
             }
         } catch (err: any) {
-            const error = err.response?.data.message
-            toast.error(error.toString())
+           if (err.name === 'ValidationError') {
+                err.errors.forEach((error: string) => toast.error(error));
+            } else {
+                const error = err.response?.data.message;
+                toast.error(error?.toString() || 'Error during registration');
+            }
         }
     }
 
