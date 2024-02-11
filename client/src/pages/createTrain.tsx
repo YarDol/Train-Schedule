@@ -28,6 +28,7 @@ const CreateTrain: FC = () => {
             const createdTrain = await TrainService.createTrain(formData);
             toast.success('Train created successfully');
             navigate('/');
+            return createdTrain;
         } catch (error) {
             toast.error('Error creating train');
         }
