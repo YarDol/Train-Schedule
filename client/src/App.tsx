@@ -10,6 +10,9 @@ import { AuthService } from './services/auth.service';
 import { login, logout } from './store/user/userSlice';
 import { useEffect } from 'react';
 import { ProtectedRoute } from './components/protectedRoute';
+import Tickets from './pages/tickets';
+import CreateTrain from './pages/createTrain';
+import EditTrain from './pages/editTrain';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,7 +41,10 @@ function App() {
     <div>
         <Navbar/>
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Main />}/>
+          <Route path="/:id" element={<Tickets />} />
+          <Route path="/:id/:edit" element={<EditTrain />} />
+          <Route path="/create" element={< CreateTrain/>} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="*" element={<Error404 />} />
