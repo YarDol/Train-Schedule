@@ -3,7 +3,7 @@ import {FC} from 'react'
 const Users: FC = () => {
     return (
         <div>
-            <h1>Users</h1>
+            <h1>User Page</h1>
         </div>
     )
 }
