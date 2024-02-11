@@ -17,11 +17,11 @@ export class Train {
     @Column()
     endCity: string
 
-    @Column("timestamp")
-    departure: Date
+    @Column()
+    departure: string
 
-    @Column("timestamp")
-    arrival: Date
+    @Column()
+    arrival: string
 
     @Column()
     availableSeats: number;
