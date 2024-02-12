@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      
+    container_name: serverPart
+    ports:
+      - "5000:5000"
+    env_file: ./server/.env
+    environment:
+      - JWT_SECRET='TrainScheduleTestTask'
+
+  # Client service
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    env_file: ./client/.env
+    depends_on:
+      - server
